@@ -4,14 +4,11 @@ The technique I used for this solution was having the first guest thread act as 
 <h1>Minotaur's Crystal Vase</h1>
 
 The three possible solutions are as follows: <br>
-1. Allow guests to enter whenever they want with no indication of the room being occupied. <br>
-The benefit to this method is that it is the easiest to implement with no mutual exclusion in place to prevent others from entering the room until they open the door and see it's occupied. <br>
+1. The benefit to this method is that it is the easiest to implement with no mutual exclusion in place to prevent others from entering the room until they open the door and see it's occupied. <br>
 The issue with this method is the lack of mutual exclusion, it can lead to multiple guests trying to enter the room all at once. <br>
-<br>
 2. Place a sign on the door to indicate if the room is currently occupied. <br>
 The benefit of this method is that it is only a slight modification of the first. If the door is labeled as busy then a guest placed to walked by the room will keep walking and come back later. If the room is available a guest will enter, setting the sign to busy. <br>
 The disadvantage of this method is that it is up to random chance that the room will be available at any point when a guest walks by. Although this allows the threads to be doing other things in the meantime. <br>
-<br>
 3. Create a queue of guests for the room, only removing guests from the queue one at a time once the room as become available. <br>
 The benefit of this method is that it is not random and very orderly. It has the same level of mutual exclusion and a much more predictable runtime. <br>
 The disadvantage of this method is that it is much more complex to implement and also does not allow the threads to do anything else while waiting in line for the vase. <br>
