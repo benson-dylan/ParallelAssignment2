@@ -9,7 +9,7 @@ The issue with this method is the lack of mutual exclusion, it can lead to multi
 2. Place a sign on the door to indicate if the room is currently occupied. <br>
 The benefit of this method is that it is only a slight modification of the first. If the door is labeled as busy then a guest placed to walked by the room will keep walking and come back later. If the room is available a guest will enter, setting the sign to busy. <br>
 The disadvantage of this method is that it is up to random chance that the room will be available at any point when a guest walks by. Although this allows the threads to be doing other things in the meantime. <br>
-3. Create a queue of guests for the room, only removing guests from the queue one at a time once the room as become available. <br>
+3. Create a queue of guests for the room, only removing guests from the queue one at a time once the room has become available. <br>
 The benefit of this method is that it is not random and very orderly. It has the same level of mutual exclusion and a much more predictable runtime. <br>
 The disadvantage of this method is that it is much more complex to implement and also does not allow the threads to do anything else while waiting in line for the vase. <br>
 
