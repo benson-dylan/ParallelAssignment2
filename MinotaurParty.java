@@ -21,44 +21,47 @@ class Labyrinth
 
     public synchronized void enterLabyrinth(int threadID)
     {
-        try
+        if (count != numGuests)
         {
-            flag.acquire();
-            //System.out.println("Guest #" + threadID + " has entered the maze!");
-            if (threadID == 1)
+            try
             {
-                if (!cupcake)
+                flag.acquire();
+                //System.out.println("Guest #" + threadID + " has entered the maze!");
+                if (threadID == 1)
                 {
-                    this.count++;
-                    this.cupcake = true;
-                    System.out.println("Guest #1 replaced the cupcake.");
+                    if (!cupcake)
+                    {
+                        this.count++;
+                        this.cupcake = true;
+                        System.out.println("Guest #1 replaced the cupcake.");
+                    }
+                    else if (!eatenList[0])
+                    {
+                        this.eatenList[0] = true;
+                        this.cupcake = false;
+                        System.out.println("Guest #1 ate the cupcake.");
+                    }
                 }
-                else if (!eatenList[0])
+                else if (eatenList[threadID - 1])
                 {
-                    this.eatenList[0] = true;
-                    this.cupcake = false;
-                    System.out.println("Guest #1 ate the cupcake.");
+                    System.out.println("Guest #" + threadID + " is full and did not eat the cupcake.");
                 }
+                else if (cupcake)
+                {
+                    eatenList[threadID - 1] = true;
+                    cupcake = false;
+                    System.out.println("Guest #" + threadID + " ate the cupcake.");
+                }
+                //System.out.println("Guest #" + threadID + " has completed the maze!");
             }
-            else if (eatenList[threadID - 1])
+            catch (InterruptedException e)
             {
-                System.out.println("Guest #" + threadID + " is full and did not eat the cupcake.");
+                e.printStackTrace();
             }
-            else if (cupcake)
+            finally
             {
-                eatenList[threadID - 1] = true;
-                cupcake = false;
-                System.out.println("Guest #" + threadID + " ate the cupcake.");
+                flag.release();
             }
-            //System.out.println("Guest #" + threadID + " has completed the maze!");
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            flag.release();
         }
     }
 

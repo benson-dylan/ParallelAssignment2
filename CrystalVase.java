@@ -5,38 +5,43 @@ class VaseRoom
 {
     private Set<Integer> visitedSet;
     private volatile boolean available;
+    private int numGuests;
 
     public VaseRoom(int numGuests)
     {
+        this.numGuests = numGuests;
         this.visitedSet = new HashSet<Integer>();
         this.available = true;
     }
 
     public void visitCrystalVase(int threadID)
     {
-        if (visitedSet.contains(threadID))
+        if (visitedSet.size() != numGuests && available)
         {
-            System.out.println("Guest #" + threadID + " has already visited the vase and keeps walking.");
-        }
-        else if (available)
-        {
-            synchronized (this)
+            if (visitedSet.contains(threadID))
             {
-                try
+                System.out.println("Guest #" + threadID + " has already visited the vase and keeps walking.");
+            }
+            else
+            {
+                synchronized (this)
                 {
-                    setBusy();
-                    System.out.println("Guest #" + threadID + " has entered the vase room and is adrmiring the vase.");
-                    Thread.sleep((int) Math.floor(Math.random() * 150 + 1));
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                finally
-                {
-                    this.visitedSet.add(threadID);
-                    setAvailable();
-                    System.out.println("Guest #" + threadID + " has exited the vase room.");
+                    try
+                    {
+                        setBusy();
+                        System.out.println("Guest #" + threadID + " has entered the vase room and is admiring the vase.");
+                        Thread.sleep((int) Math.floor(Math.random() * 150 + 1));
+                        this.visitedSet.add(threadID);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    finally
+                    {
+                        setAvailable();
+                        System.out.println("Guest #" + threadID + " has exited the vase room.");
+                    }
                 }
             }
         }
