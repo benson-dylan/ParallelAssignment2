@@ -1,10 +1,14 @@
+<h1>How to Compile and Run</h1>
+javac programName.java <br>
+java programName <br>
+
 <h1>Minotaur's Birthday Party</h1>
 The technique I used for this solution was having the first guest thread act as a counter. The guest cannot communicate with any other guests so all guests only eat one cupcake and allow the first guest to replace it. The first guest will then count how many times the cupcake is needed to be replaced. The guests are then chosen at random until the first guest announces to the minotaur that everyone has visited the maze. A semaphore is used to control access to the maze, allowing only one thread to access it at a time. A shared array is used to keep track of which guests have eaten the cupcake. This array is not shared with any other thread and is only used for a guest to see if they have already eaten or not.
 
 <h1>Minotaur's Crystal Vase</h1>
 
 The three possible solutions are as follows: <br>
-1. The benefit to this method is that it is the easiest to implement with no mutual exclusion in place to prevent others from entering the room until they open the door and see it's occupied. <br>
+1. Do nothing to notify other guests that the room is occupied. <br> The benefit to this method is that it is the easiest to implement with no real mutual exclusion in place to prevent others from entering the room until they open the door and see it's occupied. <br>
 The issue with this method is the lack of mutual exclusion, it can lead to multiple guests trying to enter the room all at once. <br>
 2. Place a sign on the door to indicate if the room is currently occupied. <br>
 The benefit of this method is that it is only a slight modification of the first. If the door is labeled as busy then a guest placed to walked by the room will keep walking and come back later. If the room is available a guest will enter, setting the sign to busy. <br>
