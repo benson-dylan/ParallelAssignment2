@@ -19,3 +19,7 @@ The benefit of this method is that it is not random and very orderly. It has the
 The disadvantage of this method is that it is much more complex to implement and also does not allow the threads to do anything else while waiting in line for the vase. <br>
 
 The method I used to solve this problem was to leave a sign on the door of the vase room. This solution isn't as neat or orderly as a queue but it is simpler to implement and works just as well. Guests will only visit the vase room once and keep walking if they pass by the room after visiting it prior. If a guest passes the room and has not visited, and the room is available, they will enter. Guests are chosen at random to walk by the room to simulate the wandering of guests, and once in the room they will spend a random (brief) amount of time. When a guest enters the room, they flip the sign to busy, and once finished, they flip the sign back to available. These actions are synchronized in order to prevent multiple guests from entering the room at the same time.
+
+<h1>Experimental Evaluation</h1>
+
+The outcome of both algorithms are not dependent on the number of guests, only the time is dependent. The time is difficult to determine as both are controlled by a random number generator. Both algorithms stop once all threads have completed the objective.
