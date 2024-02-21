@@ -22,4 +22,5 @@ The method I used to solve this problem was to leave a sign on the door of the v
 
 <h1>Experimental Evaluation</h1>
 
-The outcome of both algorithms are not dependent on the number of guests, only the time is dependent. The time is difficult to determine as both are controlled by a random number generator. Both algorithms stop once all threads have completed the objective.
+The outcome of both algorithms are not dependent on the number of guests, only the time is dependent. The time is difficult to determine as both are controlled by a random number generator. Both algorithms stop once all threads have completed the objective. <br>
+I ran numerous tests to determine if my algorithms and mutual exclusion were working properly and eventually achieve the level of exclusion that I desired.
