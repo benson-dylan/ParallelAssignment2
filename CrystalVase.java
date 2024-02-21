@@ -10,21 +10,21 @@ class VaseRoom
     public VaseRoom(int numGuests)
     {
         this.numGuests = numGuests;
-        this.visitedSet = new HashSet<Integer>();
+        this.visitedSet = Collections.synchronizedSet(new HashSet<Integer>());
         this.available = true;
     }
 
     public void visitCrystalVase(int threadID)
     {
-        if (visitedSet.size() != numGuests && available)
+        synchronized (this)
         {
-            if (visitedSet.contains(threadID))
+            if (visitedSet.size() != numGuests && available)
             {
-                System.out.println("Guest #" + threadID + " has already visited the vase and keeps walking.");
-            }
-            else
-            {
-                synchronized (this)
+                if (visitedSet.contains(threadID))
+                {
+                    System.out.println("Guest #" + threadID + " has already visited the vase and keeps walking.");
+                }
+                else
                 {
                     try
                     {
