@@ -16,16 +16,20 @@ class VaseRoom
 
     public void visitCrystalVase(int threadID)
     {
+        // This process is synchronized in order to prevent multiple threads 
+        // from accessing the set at the same time before it is updated
         synchronized (this)
         {
             if (visitedSet.size() != numGuests && available)
             {
+                // Guests only visit the room once each
                 if (visitedSet.contains(threadID))
                 {
                     System.out.println("Guest #" + threadID + " has already visited the vase and keeps walking.");
                 }
                 else
                 {
+                    // Room is set to busy once a guest has visited the room
                     try
                     {
                         setBusy();
@@ -37,6 +41,7 @@ class VaseRoom
                     {
                         e.printStackTrace();
                     }
+                    // When a guest leaves the room is set to available to allow another thread to enter
                     finally
                     {
                         setAvailable();
@@ -91,13 +96,16 @@ public class CrystalVase
         ArrayList<Guest> guestList = new ArrayList<>();
         VaseRoom vaseRoom = new VaseRoom(numGuests);
 
+        // Once again uses an arraylist to hold guest threads
         for (int i = 1; i <= numGuests; i++)
         {
             guestList.add(new Guest(i, vaseRoom));
         }
 
+        // Spawns threads
         ExecutorService executor = Executors.newFixedThreadPool(numGuests);
 
+        // Guests are chosen at random to "walk past" the vase room
         while (vaseRoom.getVisitedCount() < numGuests)
         {
             int randomNumber = (int) (Math.random() * numGuests) + 1;
