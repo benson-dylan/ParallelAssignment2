@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.*;
 
+// Class to hold labyrinth game, control access, and track which guests have eaten the cupcake
 class Labyrinth 
 {
     private int numGuests;
@@ -19,14 +20,16 @@ class Labyrinth
         this.count = 0;
     }
 
+    // Continues access to the game while any number of guests have not entered before
     public synchronized void enterLabyrinth(int threadID)
     {
         if (count != numGuests)
         {
+            // If semaphore is in use, other threads cannot enter the maze
             try
             {
                 flag.acquire();
-                //System.out.println("Guest #" + threadID + " has entered the maze!");
+                // Guest 1 acts as counter and is the only one to replace the cupcake
                 if (threadID == 1)
                 {
                     if (!cupcake)
@@ -42,6 +45,8 @@ class Labyrinth
                         System.out.println("Guest #1 ate the cupcake.");
                     }
                 }
+                // Other guests only eat one cupcake and use the array to check if they have eaten one yet
+                // This information is not shared with any other guests
                 else if (eatenList[threadID - 1])
                 {
                     System.out.println("Guest #" + threadID + " is full and did not eat the cupcake.");
@@ -52,12 +57,12 @@ class Labyrinth
                     cupcake = false;
                     System.out.println("Guest #" + threadID + " ate the cupcake.");
                 }
-                //System.out.println("Guest #" + threadID + " has completed the maze!");
             }
             catch (InterruptedException e)
             {
                 e.printStackTrace();
             }
+            // When the guest exits the maze, the semaphore is released
             finally
             {
                 flag.release();
@@ -67,7 +72,6 @@ class Labyrinth
 
     public synchronized int getCount()
     {
-        //System.out.println("Count: " + this.count);
         return this.count;
     }
     
@@ -103,11 +107,13 @@ public class MinotaurParty
         ExecutorService executor = Executors.newFixedThreadPool(numGuests);
         ArrayList<Guest> guestList = new ArrayList<>();
 
+        // Uses arraylist to hold guest threads
         for (int i = 0; i < numGuests; i++)
         {
             guestList.add(new Guest(i + 1, labyrinth));
         }
 
+        // While the game is in play, guests are chosen at random to enter
         while (labyrinth.getCount() < numGuests)
         {
             int randomNumber = (int) (Math.random() * numGuests) + 1;
@@ -128,6 +134,7 @@ public class MinotaurParty
             e.printStackTrace();
         }
 
+        // This prints when the game is over
         System.out.println("All guests have completed the maze.");
     }
 }
